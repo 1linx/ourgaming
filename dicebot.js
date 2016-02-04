@@ -52,11 +52,11 @@ module.exports = function (req, res, next) {
                       rolls.join(' + ') + ' = *' + total + '*';
   } else if (times > 1 && qualifier >= 1) {    
     // if rolling more one than dice with qualifier, show all dice in brackets, plus qualifier, and calculated total
-    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' ' + matches[7]+ ' ' + qualifier+ ':\n' +
                       '(' + rolls.join(' + ') + ') '+ matches[7]+ ' ' + qualifier + ' = *' + qualifiedTotal + '*';
   } else if (times == 1 && qualifier >= 1){
     // if rolling one dice,with qualifier, show dice plus qualifier and calculated total
-    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' ' + matches[7]+ ' ' + qualifier + ':\n' +
                       total + ' ' + matches[7]+ ' ' + qualifier + ' = *' + qualifiedTotal + '*';
   } else {
     // if rolling one dice with no qualifier, show rolled value only.
