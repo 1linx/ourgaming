@@ -3,23 +3,30 @@ var request = require('request');
 module.exports = function (req, res, next) {
   // default roll is 2d6
   var matches;
-  var times = 2;
+  var times = 1;
   var die = 6;
+  var qualifier = 0;
   var rolls = [];
   var total = 0;
   var botPayload = {};
 
   if (req.body.text) {
     // parse roll type if specified
-    matches = req.body.text.match(/^(\d{1,2})d(\d{1,2})$/);
+    matches = req.body.text.match(/^(\d{1,3})(d|D)(\d{1,3})$|^(\d{1,3})(d|D)(\d{1,3})(\+|\-)(\d{1,3})$/);
 
-    if (matches && matches[1] && matches[2]) {
+    if (matches && matches[1] && matches[2] && matches[3]) {
       times = matches[1];
-      die = matches[2];
+      die = matches[3];
+
+    } else if (matches && matches[4] && matches[5] && matches[6] && matches[7] && matches[8]) {
+      times = matches[4];
+      die = matches[6];
+      qualifier = parseInt(matches[8]);
 
     } else {
-      // send error message back to user if input is bad
-      return res.status(200).send('<number>d<sides>');
+      // send error message back to user if input is bad UPDATE THIS MESSAGE
+      return res.status(200).send('Something went wrong there. Make sure you have a number, followed by \'d\' followed by another number. Right now you\'re sending: ' + req.body.text);
+
     }
   }
 
@@ -29,10 +36,26 @@ module.exports = function (req, res, next) {
     rolls.push(currentRoll);
     total += currentRoll;
   }
-
-  // write response message and add to payload
-  botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
-                    rolls.join(' + ') + ' = *' + total + '*';
+  qualifiedTotal = parseInt(total);
+  qualifiedTotal += qualifier;
+    // write response message and add to payload
+  if (times > 1 && qualifier < 1) {
+    // if rolling more one than dice, but with no qualifier, show all dice and calculated total
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
+                      rolls.join(' + ') + ' = *' + total + '*';
+  } else if (times > 1 && qualifier >= 1) {    
+    // if rolling more one than dice with qualifier, show all dice in brackets, plus qualifier, and calculated total
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
+                      '(' + rolls.join(' + ') + ') + ' + qualifier + ' = *' + qualifiedTotal + '*';
+  } else if (times == 1 && qualifier >= 1){
+    // if rolling one dice,with qualifier, show dice plus qualifier and calculated total
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
+                      total + ' + ' + qualifier + ' = *' + qualifiedTotal + '*';
+  } else {
+    // if rolling one dice with no qualifier, show rolled value only.
+    botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
+                      '*' + total + '*';
+  }
 
   botPayload.username = 'dicebot';
   botPayload.channel = req.body.channel_id;
@@ -45,7 +68,7 @@ module.exports = function (req, res, next) {
 
     } else if (status !== 200) {
       // inform user that our Incoming WebHook failed
-      return next(new Error('Incoming WebHook: ' + status + ' ' + body));
+      return next(new Error('Incoming *WebHook*: ' + status + ' ' + body));
 
     } else {
       return res.status(200).end();
