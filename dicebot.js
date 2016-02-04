@@ -39,8 +39,13 @@ module.exports = function (req, res, next) {
     total += currentRoll;
   }
   qualifiedTotal = parseInt(total);
-  qualifiedTotal += qualifier;
+  //if roll was senbt with plus sign, add it to total, else subtract it.
+  if (matches[7] == "+") {
+     qualifiedTotal += qualifier;
+  } else if (matches[7] == "-") {
+      qualifiedTotal -= qualifier;
     // write response message and add to payload
+  }
   if (times > 1 && qualifier < 1) {
     // if rolling more one than dice, but with no qualifier, show all dice and calculated total
     botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
@@ -48,11 +53,11 @@ module.exports = function (req, res, next) {
   } else if (times > 1 && qualifier >= 1) {    
     // if rolling more one than dice with qualifier, show all dice in brackets, plus qualifier, and calculated total
     botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
-                      '(' + rolls.join(' + ') + ') + ' + qualifier + ' = *' + qualifiedTotal + '*';
+                      '(' + rolls.join(' + ') + ') '+ matches[7]+ ' ' + qualifier + ' = *' + qualifiedTotal + '*';
   } else if (times == 1 && qualifier >= 1){
     // if rolling one dice,with qualifier, show dice plus qualifier and calculated total
     botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ' + ' + qualifier + ':\n' +
-                      total + ' + ' + qualifier + ' = *' + qualifiedTotal + '*';
+                      total + ' ' + matches[7]+ ' ' + qualifier + ' = *' + qualifiedTotal + '*';
   } else {
     // if rolling one dice with no qualifier, show rolled value only.
     botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
