@@ -11,8 +11,10 @@ module.exports = function (req, res, next) {
   var botPayload = {};
 
   if (req.body.text) {
+    // remove spaces from incoming text
+    rollText = req.body.text.replace(/\s+/g, '');
     // parse roll type if specified
-    matches = req.body.text.match(/^(\d{1,3})(d|D)(\d{1,3})$|^(\d{1,3})(d|D)(\d{1,3})(\+|\-)(\d{1,3})$/);
+    matches = rollText.match(/^(\d{1,3})(d|D)(\d{1,3})$|^(\d{1,3})(d|D)(\d{1,3})(\+|\-)(\d{1,3})$/);
 
     if (matches && matches[1] && matches[2] && matches[3]) {
       times = matches[1];
