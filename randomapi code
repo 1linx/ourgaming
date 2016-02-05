@@ -1,0 +1,68 @@
+var https = require('https');
+ 
+
+/**
+ * HOW TO Make an HTTP Call - POST
+ */
+// do a POST request
+// create the JSON object
+jsonObject = JSON.stringify({
+    "jsonrpc": "2.0",
+    "method": "generateIntegers",
+    "params": {
+        "apiKey": "deb0a73d-9211-4a7c-a194-7633d23d5193",
+        "n": 10,
+        "min": 1,
+        "max": 4,
+        "replacement": true,
+        "base": 10
+    },
+    "id": 8185
+
+});
+ 
+// prepare the header
+var postheaders = {
+    'Content-Type' : 'application/json',
+    'Content-Length' : Buffer.byteLength(jsonObject, 'utf8')
+};
+ 
+// the post options
+var optionspost = {
+    host : 'api.random.org',
+    port : 443,
+    path : '/json-rpc/1/invoke',
+    method : 'POST',
+    headers : postheaders
+};
+ 
+console.info('Options prepared:');
+console.info(optionspost);
+console.info('Do the POST call');
+ var someData;
+// do the POST call
+var reqPost = https.request(optionspost, function(res) {
+    console.log("statusCode: ", res.statusCode);
+    // uncomment it for header details
+//  console.log("headers: ", res.headers);
+ 
+    res.on('data', function(d) {
+        console.info('POST result:\n');
+        process.stdout.write(d);
+        someData = JSON.parse(d);
+        console.log("\n\n\n\nhere is some data: " + someData.result.random.data +"\n\n");
+        console.info('\n\nPOST completed');
+    });
+});
+
+// write the json data
+reqPost.write(jsonObject);
+reqPost.end();
+reqPost.on('error', function(e) {
+    console.error(e);
+
+});
+
+
+
+ 
