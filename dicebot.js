@@ -1,11 +1,11 @@
 var randomOrgApiData = [];
 var request = require('request');
+var https = require('https');
+ 
 
-  // random.org API roller begins here.
 /**
  * HOW TO Make an HTTP Call - POST
  */
- var https = require('https');
 // do a POST request
 // create the JSON object
 jsonObject = JSON.stringify({
@@ -13,14 +13,15 @@ jsonObject = JSON.stringify({
     "method": "generateIntegers",
     "params": {
         "apiKey": "deb0a73d-9211-4a7c-a194-7633d23d5193",
-        "n": 1,
+        "n": 10,
         "min": 1,
-        "max": 6,
+        "max": 4,
         "replacement": true,
         "base": 10
     },
-    "id": 4361
-    } );
+    "id": 8185
+
+});
  
 // prepare the header
 var postheaders = {
@@ -40,7 +41,7 @@ var optionspost = {
 console.info('Options prepared:');
 console.info(optionspost);
 console.info('Do the POST call');
- var contentsReturned = []
+ var someData;
 // do the POST call
 var reqPost = https.request(optionspost, function(res) {
     console.log("statusCode: ", res.statusCode);
@@ -50,19 +51,23 @@ var reqPost = https.request(optionspost, function(res) {
     res.on('data', function(d) {
         console.info('POST result:\n');
         process.stdout.write(d);
-        var contentsReturned = JSON.parse(d);
+        someData = JSON.parse(d);
+        console.log("\n\n\n\nhere is some data: " + someData.result.random.data +"\n\n");
         console.info('\n\nPOST completed');
     });
 });
- 
+
 // write the json data
 reqPost.write(jsonObject);
 reqPost.end();
 reqPost.on('error', function(e) {
     console.error(e);
+
 });
-// var contentsReturned = JSON.parse(reqPost);
-console.log("\n\nhow about this: " + contentsReturned);
+
+
+
+ 
 
 module.exports = function (req, res, next) {
   // default roll is 2d6
