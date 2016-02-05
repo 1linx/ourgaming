@@ -140,6 +140,26 @@ var reqPost = https.request(optionspost, function(res) {
                             '*' + total + '*';
         }
 
+    });
+});
+
+
+// write the json data
+reqPost.write(jsonObject);
+reqPost.end();
+reqPost.on('error', function(e) {
+     botPayload.text = e;
+
+});
+
+  // // roll dice and sum
+  // for (var i = 0; i < times; i++) {
+  //   var currentRoll = roll(1, die);
+  //   rolls.push(currentRoll);
+  //   total += currentRoll;
+  // }
+
+setTimeout(function() {
 
         botPayload.username = 'dicebot';
         botPayload.channel = req.body.channel_id;
@@ -158,24 +178,6 @@ var reqPost = https.request(optionspost, function(res) {
             return res.status(200).end();
           }
         });
-
-    });
-});
-
-// write the json data
-reqPost.write(jsonObject);
-reqPost.end();
-reqPost.on('error', function(e) {
-     botPayload.text = e;
-
-});
-
-  // // roll dice and sum
-  // for (var i = 0; i < times; i++) {
-  //   var currentRoll = roll(1, die);
-  //   rolls.push(currentRoll);
-  //   total += currentRoll;
-  // }
-
+        }, 3000);
 }
 
