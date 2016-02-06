@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
   var rolls = [];
   var total = 0;
   var botPayload = {};
-  var rollText = "1d6+0";
+  var rollText = "1d6";
 
 
   function roll (min, max) {
