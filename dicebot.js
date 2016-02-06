@@ -42,16 +42,17 @@ module.exports = function (req, res, next) {
     // remove spaces from incoming text
     rollText = req.body.text.replace(/\s+/g, '');
     // parse roll type if specified
-    matches = rollText.match(/^(\d{1,3})(d|D)(\d{1,3})$|^(\d{1,3})(d|D)(\d{1,3})(\+|\-)(\d{1,3})$/);
+    // matches = rollText.match(/^(\d{1,3})(d|D)(\d{1,3})$|^(\d{1,3})(d|D)(\d{1,3})(\+|\-)(\d{1,3})$/);
+    matches = rollText.match(/^(\d{1,3})(d|D)(\d{1,3})$/);
 
     if (matches && matches[1] && matches[2] && matches[3]) {
       times = matches[1];
       die = matches[3];
 
-    } else if (matches && matches[4] && matches[5] && matches[6] && matches[7] && matches[8]) {
-      times = matches[4];
-      die = matches[6];
-      modifier = parseInt(matches[8]);
+    // } else if (matches && matches[4] && matches[5] && matches[6] && matches[7] && matches[8]) {
+    //   times = matches[4];
+    //   die = matches[6];
+    //   modifier = parseInt(matches[8]);
 
     } else {
       // send error message back to user if input is bad 
@@ -117,12 +118,13 @@ var reqPost = https.request(optionspost, function(res) {
 
 
         //if roll was sent with plus sign, add it to total, else subtract it.
-        if (matches[7] == "+") {
-           modifiedTotal += modifier;
-        } else if (matches[7] == "-") {
-            modifiedTotal -= modifier;
+        // if (matches[7] == "+") {
+        //    modifiedTotal += modifier;
+        // } else if (matches[7] == "-") {
+        //     modifiedTotal -= modifier;
+        // }
+        
           // write response message and add to payload
-        }
         if (times > 1 && modifier < 1) {
           // if rolling more one than dice, but with no modifier, show all dice and calculated total
           botPayload.text = req.body.user_name + ' rolled ' + times + 'd' + die + ':\n' +
