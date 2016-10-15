@@ -25,22 +25,24 @@ return diceRunningTotal;
 
 }
 
-
-
 var slackLink = "https://hooks.slack.com/services/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";
-var modifier = 4;
-var payload = 'payload={';
-payload += '"channel": "#test"';
-payload += ',"username": "dice-bot"';
-payload += ',"icon_emoji": ":game_die:"';
-payload += ',"text": "Some Txt"';
-payload += '}';
 
-console.log(payload);
+var rollResult;
 
 $("#1d6").click(function() {
+	rollResult = diceRoll(1,1,6);
+
+	var payload = 'payload={';
+	payload += '"channel": "#rolldembones"';
+	payload += ',"username": "dice-bot"';
+	payload += ',"icon_emoji": ":game_die:"';
+	payload += ',"text": "' + rollResult  + '"';
+	payload += '}';
+	console.log(payload);
+
 	$.post(slackLink, payload
 	);
+	console.log(payload);
 });
 
 </script>
