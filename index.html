@@ -110,16 +110,20 @@ $(".roll-btn").click(function() {
 	var btn_id = this.id;
 	var diceNum = parseInt(btn_id[0]);
 	var diceMax = parseInt(btn_id.slice(2));
+	var modifierValue = parseInt($("#modifierValue").val());
+	if (isNaN(modifierValue)) {
+		modifierValue = 0;
+	}
 	
-	rollResult = diceRoll(diceNum,1,diceMax) + parseInt($("#modifierValue").val());
+	rollResult = diceRoll(diceNum,1,diceMax) + modifierValue;
 	
 	username = $('#nameInput').val();
 	if (username === "") {
 		username = undefined;
 	}
 	var payload = buildPayload(btn_id, rollResult, username);
-	<!--// $.post(slackLink, payload
-	// );-->
+	$.post(slackLink, payload
+	);
 	console.log(payload);
 });
 </script>
