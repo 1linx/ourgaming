@@ -1,45 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
-	<title></title>
+	<!-- jQuery CDN link -->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<title>Dice roller</title>
 </head>
 <body>
-<button id="1d6">Roll 1D6</button>
+<div class="container">
+<br>
+<br>
+	<div class="col-md-2"></div>
+
+	<div class="col-md-8">
+
+		<div class="page-header">
+		  <h1>Roll some dice</h1>		  
+			  <input type="text" class="form-control" placeholder="Your name" id="nameInput" aria-describedby="basic-addon2">		
+		</div>
+
+	  <ul class="nav nav-tabs">
+	    <li class="active"><a data-toggle="tab" href="#stdDice">Standard Dice</a></li>
+	    <li><a data-toggle="tab" href="#swDice">Star Wars Dice</a></li>
+	    <li><a data-toggle="tab" href="#advDice">Advanced Rolls</a></li>
+	    <!-- <li><a data-toggle="tab" href="#menu3">Menu 3</a></li> -->
+	  </ul>
+	  
+	  <div class="tab-content">
+
+	    <div id="stdDice" class="tab-pane fade in active">
+	    <br />
+	      <button id="1d4" class="btn">Roll 1D4</button>
+			<button id="1d6" class="btn btn-success">Roll 1D6</button>
+			<button id="1d8" class="btn">Roll 1D8</button>
+			<button id="1d10" class="btn">Roll 1D10</button>
+			<button id="1d20" class="btn">Roll 1D20</button>
+			<button id="1d12" class="btn">Roll 1D12</button>
+			<button id="1d100" class="btn">Roll 1D100</button>
+			<!-- <input type="text" class="form-control"> -->
+			<br>
+			<h5>Add a modifier:</h5>
+			<input type="number" class="form-control" id="modifierValue">
+	    </div>
+
+	    <div id="swDice" class="tab-pane fade">
+    		<br />
+			<p>Coming soon.<br />Okay, soonish.<br />Look, coding all those dice faces is going to suck, okay.</p>
+	    </div>
+
+	    <div id="advDice" class="tab-pane fade">
+    		<br />
+			<p>Coming soon.</p>
+	    </div>
+
+	  </div>	
+
+	</div>
+
+
+
+	<div class="col-md-2"></div>
+
+
+</div>
+
 </body>
 <script type="text/javascript">
 
 function diceRoll(number, min, max) {
     var diceRunningTotal = 0;
-    // console.log("Rolling a D" + max);
 	for (var numberOfRolls = 0; numberOfRolls < number; numberOfRolls++) {
 		var aSingleDie = (Math.random() * ((max + 1) - min) + min);
 		aSingleDie = Math.floor(aSingleDie);		
-		// console.log("You rolled a " + aSingleDie);
 		diceRunningTotal += aSingleDie;
 	}
-	// console.log("running total is " + diceRunningTotal);
-	console.log(diceRunningTotal);
 	
 return diceRunningTotal;
 
 }
 
+function buildPayload(numberRolled, username = "dicebot") {
+	var payload = 'payload={';
+	payload += '"channel": "#rolldembones"';
+	payload += ',"username": "' + username + '"';
+	payload += ',"icon_emoji": ":game_die:"';
+	payload += ',"text": "' + numberRolled  + '"';
+	payload += '}';
+	return payload;
+}
+
 var slackLink = "https://hooks.slack.com/services/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";
 
 var rollResult;
+var username;
 
 $("#1d6").click(function() {
 	rollResult = diceRoll(1,1,6);
-
-	var payload = 'payload={';
-	payload += '"channel": "#rolldembones"';
-	payload += ',"username": "dice-bot"';
-	payload += ',"icon_emoji": ":game_die:"';
-	payload += ',"text": "' + rollResult  + '"';
-	payload += '}';
-	console.log(payload);
-
+	username = $('#nameInput').val();
+	if (username === "") {
+		username = undefined;
+	}
+	var payload = buildPayload(rollResult, username);
 	$.post(slackLink, payload
 	);
 	console.log(payload);
