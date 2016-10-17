@@ -91,18 +91,17 @@ return diceRunningTotal;
 
 }
 
-function buildPayload(numberRolled, username = "dicebot") {
+function buildPayload(diceType, numberRolled, username = "dicebot") {
 	var payload = 'payload={';
 	payload += '"channel": "#rolldembones"';
 	payload += ',"username": "' + username + '"';
 	payload += ',"icon_emoji": ":game_die:"';
-	payload += ',"text": "' + numberRolled  + '"';
+	payload += ',"text": "Rolled ' + diceType + ' for a result of: *' + numberRolled  + '*"';
 	payload += '}';
 	return payload;
 }
 
 var slackLink = "https://hooks.slack.com/services/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";
-
 var rollResult;
 var username;
 
@@ -112,15 +111,15 @@ $(".roll-btn").click(function() {
 	var diceNum = parseInt(btn_id[0]);
 	var diceMax = parseInt(btn_id.slice(2));
 	
-	rollResult = diceRoll(diceNum,1,diceMax);
+	rollResult = diceRoll(diceNum,1,diceMax) + parseInt($("#modifierValue").val());
 	
 	username = $('#nameInput').val();
 	if (username === "") {
 		username = undefined;
 	}
-	var payload = buildPayload(rollResult, username);
-	$.post(slackLink, payload
-	);
+	var payload = buildPayload(btn_id, rollResult, username);
+	<!--// $.post(slackLink, payload
+	// );-->
 	console.log(payload);
 });
 </script>
