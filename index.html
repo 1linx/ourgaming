@@ -39,13 +39,13 @@
 
 	    <div id="stdDice" class="tab-pane fade in active">
 	    <br />
-	      <button id="1d4" class="btn">Roll 1D4</button>
-			<button id="1d6" class="btn btn-success">Roll 1D6</button>
-			<button id="1d8" class="btn">Roll 1D8</button>
-			<button id="1d10" class="btn">Roll 1D10</button>
-			<button id="1d20" class="btn">Roll 1D20</button>
-			<button id="1d12" class="btn">Roll 1D12</button>
-			<button id="1d100" class="btn">Roll 1D100</button>
+	      <button id="1d4" class="btn roll-btn">Roll 1D4</button>
+			<button id="1d6" class="btn btn-success roll-btn">Roll 1D6</button>
+			<button id="1d8" class="btn roll-btn">Roll 1D8</button>
+			<button id="1d10" class="btn roll-btn">Roll 1D10</button>
+			<button id="1d20" class="btn roll-btn">Roll 1D20</button>
+			<button id="1d12" class="btn roll-btn">Roll 1D12</button>
+			<button id="1d100" class="btn roll-btn">Roll 1D100</button>
 			<!-- <input type="text" class="form-control"> -->
 			<br>
 			<h5>Add a modifier:</h5>
@@ -78,11 +78,14 @@
 
 function diceRoll(number, min, max) {
     var diceRunningTotal = 0;
+    // console.log("Rolling a D" + max);
 	for (var numberOfRolls = 0; numberOfRolls < number; numberOfRolls++) {
 		var aSingleDie = (Math.random() * ((max + 1) - min) + min);
 		aSingleDie = Math.floor(aSingleDie);		
+		// console.log("You rolled a " + aSingleDie);
 		diceRunningTotal += aSingleDie;
 	}
+	// console.log("running total is " + diceRunningTotal);
 	
 return diceRunningTotal;
 
@@ -103,8 +106,14 @@ var slackLink = "https://hooks.slack.com/services/T0KRU3CNS/B0L6TD3ML/wMmDumXtAw
 var rollResult;
 var username;
 
-$("#1d6").click(function() {
-	rollResult = diceRoll(1,1,6);
+
+$(".roll-btn").click(function() {
+	var btn_id = this.id;
+	var diceNum = parseInt(btn_id[0]);
+	var diceMax = parseInt(btn_id.slice(2));
+	
+	rollResult = diceRoll(diceNum,1,diceMax);
+	
 	username = $('#nameInput').val();
 	if (username === "") {
 		username = undefined;
@@ -114,6 +123,5 @@ $("#1d6").click(function() {
 	);
 	console.log(payload);
 });
-
 </script>
 </html>
