@@ -21,6 +21,10 @@ app.post('/hello', hellobot);
 // route that listens for a POST to /roll
 app.post('/roll', dicebot);
 
+//static route for images
+// app.use(express.static('./imgs'));
+app.use('/static', express.static('./imgs'));
+
 
 // error handler
 app.use(function (err, req, res, next) {
