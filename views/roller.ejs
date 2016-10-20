@@ -161,10 +161,7 @@
 
 	</div>
 
-
-
 	<div class="col-md-2"></div>
-
 
 </div>
 
@@ -204,7 +201,7 @@ $(document).ready(function(e) {
 	
 	var rollResult;
 
-	$(".roll-btn").click(function() {
+	$(".roll-btn").on("click touch", function() {
 		var btn_id = this.id;
 		var diceNum = parseInt(btn_id[0]);
 		var diceMax = parseInt(btn_id.slice(2));
@@ -224,9 +221,7 @@ $(document).ready(function(e) {
 		);
 		console.log(payload);
 	});
-	// --------------------------------------------------------- End Standard rolls ---------------------------------------------------------
-
-	
+	// --------------------------------------------------------- End Standard rolls ---------------------------------------------------------	
 
 	// ----------------------------------------------------------- SW Rolls -----------------------------------------------------------
 	function swDiceRoll(activeDice) {
@@ -352,7 +347,7 @@ $(document).ready(function(e) {
 		}
 		typeHolderArr.forEach( function(dieType) {
 			dicePositionTrack.forEach( function(position){
-				$("#"+ dieType + position).click(function(){
+				$("#"+ dieType + position).on("click touch", function(){
 					toggleClassesOnSwDice(dieType, position);
 				});
 			});
@@ -402,7 +397,7 @@ $(document).ready(function(e) {
 		return payload;
 	}
 
-	$("#sw_roll").click(function() {
+	$("#sw_roll").on("click touch", function() {
 	// console.log(swDiceRoll(diceActiveLevel));
 		var diceCounter = 0;
 		$.each(diceActiveLevel, function(index, value) {
