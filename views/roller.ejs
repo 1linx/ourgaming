@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- jQuery CDN link -->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<style>
+	/* This should be moved to own file. */
+	#swDice h5 {
+		text-align: center;
+	}
+
+	.pos-dice {
+		background-color: #EEFFEE;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.dice-images {
+		margin-top: 5px;
+		margin-bottom: 5px;
+		cursor: pointer; 
+	}
+	.sw-dice-roll-btn {
+		
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top:10px;
+		margin-bottom:10px;
+	}
+
+	.faded {
+		opacity: 0.5;
+	}
+
+	</style>
+
+	<title>Dice roller</title>
+</head>
+<body>
+<div class="container">
+<br>
+<br>
+	<div class="col-md-2"></div>
+
+	<div class="col-md-8">
+
+		<div class="page-header">
+		  <h1>Roll some dice</h1>		  
+			  <input type="text" class="form-control" placeholder="Your name" id="nameInput" aria-describedby="basic-addon2">		
+		</div>
+
+	  <ul class="nav nav-tabs">
+	    <li><a data-toggle="tab" href="#stdDice">Standard Dice</a></li>
+	    <li class="active"><a data-toggle="tab" href="#swDice">Star Wars Dice</a></li>
+	    <li><a data-toggle="tab" href="#advDice">Advanced Rolls</a></li>
+	    <!-- <li><a data-toggle="tab" href="#menu3">Menu 3</a></li> -->
+	  </ul>
+	  
+	  <div class="tab-content">
+
+	    <div id="stdDice" class="tab-pane fade">
+			<br>
+	        <button id="1d4" class="btn roll-btn">Roll 1D4</button>
+			<button id="1d6" class="btn btn-success roll-btn">Roll 1D6</button>
+			<button id="1d8" class="btn roll-btn">Roll 1D8</button>
+			<button id="1d10" class="btn roll-btn">Roll 1D10</button>
+			<button id="1d20" class="btn roll-btn">Roll 1D20</button>
+			<button id="1d12" class="btn roll-btn">Roll 1D12</button>
+			<button id="1d100" class="btn roll-btn">Roll 1D100</button>
+			<!-- <input type="text" class="form-control"> -->
+			<br>
+			<h5>Add a modifier:</h5>
+			<input type="number" class="form-control" id="modifierValue">
+	    </div>
+
+	    <div id="swDice" class="tab-pane fade in active">
+    		<br>
+			<div class="col-md-5 pos-dice">
+				<h5>Positive</h5>
+				<img id="sw_boost1" class="dice-images faded" src="./static/imgs/boost.png"/>
+				<img id="sw_boost2" class="dice-images faded" src="./static/imgs/boost.png"/>
+				<img id="sw_boost3" class="dice-images faded" src="./static/imgs/boost.png"/>
+				<img id="sw_boost4" class="dice-images faded" src="./static/imgs/boost.png"/>
+				<img id="sw_boost5" class="dice-images faded" src="./static/imgs/boost.png"/>
+				<img id="sw_boost6" class="dice-images faded" src="./static/imgs/boost.png"/>
+    			<br>
+				<img id="sw_ability1" class="dice-images faded" src="./static/imgs/ability.png"/>
+				<img id="sw_ability2" class="dice-images faded" src="./static/imgs/ability.png"/>
+				<img id="sw_ability3" class="dice-images faded" src="./static/imgs/ability.png"/>
+				<img id="sw_ability4" class="dice-images faded" src="./static/imgs/ability.png"/>
+				<img id="sw_ability5" class="dice-images faded" src="./static/imgs/ability.png"/>
+				<img id="sw_ability6" class="dice-images faded" src="./static/imgs/ability.png"/>
+    			<br>
+				<img id="sw_proficiency1" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+				<img id="sw_proficiency2" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+				<img id="sw_proficiency3" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+				<img id="sw_proficiency4" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+				<img id="sw_proficiency5" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+				<img id="sw_proficiency6" class="dice-images faded" src="./static/imgs/proficiency.png"/>
+			</div>
+			<div class="col-md-5">
+				<h5>Negative</h5>
+				<img id="sw_setback1" class="dice-images faded" src="./static/imgs/setback.png"/>
+				<img id="sw_setback2" class="dice-images faded" src="./static/imgs/setback.png"/>
+				<img id="sw_setback3" class="dice-images faded" src="./static/imgs/setback.png"/>
+				<img id="sw_setback4" class="dice-images faded" src="./static/imgs/setback.png"/>
+				<img id="sw_setback5" class="dice-images faded" src="./static/imgs/setback.png"/>
+				<img id="sw_setback6" class="dice-images faded" src="./static/imgs/setback.png"/>
+    			<br>
+				<img id="sw_difficulty1" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+				<img id="sw_difficulty2" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+				<img id="sw_difficulty3" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+				<img id="sw_difficulty4" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+				<img id="sw_difficulty5" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+				<img id="sw_difficulty6" class="dice-images faded" src="./static/imgs/difficulty.png"/>
+    			<br>
+				<img id="sw_challenge1" class="dice-images faded" src="./static/imgs/challenge.png"/>
+				<img id="sw_challenge2" class="dice-images faded" src="./static/imgs/challenge.png"/>
+				<img id="sw_challenge3" class="dice-images faded" src="./static/imgs/challenge.png"/>
+				<img id="sw_challenge4" class="dice-images faded" src="./static/imgs/challenge.png"/>
+				<img id="sw_challenge5" class="dice-images faded" src="./static/imgs/challenge.png"/>
+				<img id="sw_challenge6" class="dice-images faded" src="./static/imgs/challenge.png"/>
+			</div>
+			<div class="col-md-2">
+				<h5>Other</h5>
+				<img id="sw_force" class="dice-images" src="./static/imgs/force.png"/>
+    			<br>
+				<img id="sw_percentile" class="dice-images" src="./static/imgs/percentile.png"/>
+			</div>
+			<div class="col-md-12 sw-dice-roll-btn">
+				<button id="sw_roll" class="btn sw-roll-btn">Roll</button>
+				
+			</div>
+	    </div>
+
+	    <div id="advDice" class="tab-pane fade">
+    		<br>
+			<p>Coming soon.</p>
+	    </div>
+
+	  </div>	
+
+	</div>
+
+
+
+	<div class="col-md-2"></div>
+
+
+</div>
+
+</body>
+<script type="text/javascript">
+$(document).ready(function(e) {
+	function diceRoll(number, min, max) {
+		var diceRunningTotal = 0;
+		// console.log("Rolling a D" + max);
+		for (var numberOfRolls = 0; numberOfRolls < number; numberOfRolls++) {
+			var aSingleDie = (Math.random() * ((max + 1) - min) + min);
+			aSingleDie = Math.floor(aSingleDie);		
+			// console.log("You rolled a " + aSingleDie);
+			diceRunningTotal += aSingleDie;
+		}
+		// console.log("running total is " + diceRunningTotal);
+		
+	return diceRunningTotal;
+
+	}
+
+	function buildPayload(diceType, numberRolled, username = "dicebot") {
+		var payload = 'payload={';
+		payload += '"channel": "#test"';
+		payload += ',"username": "' + username + '"';
+		payload += ',"icon_emoji": ":game_die:"';
+		payload += ',"text": "Rolled ' + diceType + ' for a result of: *' + numberRolled  + '*"';	
+		payload += ',"image_url": "http://ourgaming.herokuapp.com/static/triumph.png"',
+		payload += '}';
+		return payload;
+	}
+
+	var slackLink = <%- JSON.stringify(slackLink) %>; // should come from somewhere else?
+	var rollResult;
+	var username;
+
+
+	$(".roll-btn").click(function() {
+		var btn_id = this.id;
+		var diceNum = parseInt(btn_id[0]);
+		var diceMax = parseInt(btn_id.slice(2));
+		var modifierValue = parseInt($("#modifierValue").val());
+		if (isNaN(modifierValue)) {
+			modifierValue = 0;
+		}
+		
+		rollResult = diceRoll(diceNum,1,diceMax) + modifierValue;
+		
+		username = $('#nameInput').val();
+		if (username === "") {
+			username = undefined;
+		}
+		var payload = buildPayload(btn_id, rollResult, username);
+		$.post(slackLink, payload
+		);
+		console.log(payload);
+	});
+
+	var diceTypeTrack = ["sw_boost", "sw_ability", "sw_proficiency", "sw_setback", "sw_difficulty", "sw_challenge"];
+	var dicePositionTrack = [1,2,3,4,5,6];
+	var diceActiveLevel = {"sw_boost" : 0, "sw_ability" : 0, "sw_proficiency" : 0, "sw_setback" : 0, "sw_difficulty" : 0, "sw_challenge" : 0};
+	
+	function toggleClasses(elementId, position){
+		console.log("input: " + elementId + ", " + position);
+		var newDiceCountValue = position;
+		
+		// clear all faded classes selected set of dice
+		for	(var i = 1; i <= 6; i++) {
+			$("#"+elementId + i).addClass("faded");
+		}
+
+		// if same dice clicked as previously, clear eveything and move on
+		if (position == diceActiveLevel[elementId]) {
+			diceActiveLevel[elementId] = 0;
+			return;
+		}
+
+		// toggle all dice below and including the one clicked
+		while (position >= 0) {
+			$("#"+elementId + position).toggleClass("faded");
+			position--;
+		}
+		
+		diceActiveLevel[elementId] = newDiceCountValue;
+		console.log(diceActiveLevel);
+	}
+
+	diceTypeTrack.forEach( function(dieType) {
+		dicePositionTrack.forEach( function(position){
+			$("#"+ dieType + position).click(function(){
+				toggleClasses(dieType, position);
+			});
+		});
+	});
+
+
+});
+</script>
+</html>
