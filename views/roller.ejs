@@ -24,6 +24,13 @@
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
+	}	
+
+	.neg-dice {
+		background-color: #FFEEEE;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	.dice-images {
@@ -83,6 +90,7 @@
 			<br>
 			<h5>Add a modifier:</h5>
 			<input type="number" class="form-control" id="modifierValue">
+			<br>
 	    </div>
 
 	    <div id="swDice" class="tab-pane fade in active">
@@ -110,7 +118,7 @@
 				<img id="sw_proficiency5" class="dice-images faded" src="./static/imgs/proficiency.png"/>
 				<img id="sw_proficiency6" class="dice-images faded" src="./static/imgs/proficiency.png"/>
 			</div>
-			<div class="col-md-5">
+			<div class="col-md-5 neg-dice">
 				<h5>Negative</h5>
 				<img id="sw_setback1" class="dice-images faded" src="./static/imgs/setback.png"/>
 				<img id="sw_setback2" class="dice-images faded" src="./static/imgs/setback.png"/>
@@ -140,8 +148,7 @@
 				<img id="sw_percentile" class="dice-images" src="./static/imgs/percentile.png"/>
 			</div>
 			<div class="col-md-12 sw-dice-roll-btn">
-				<button id="sw_roll" class="btn sw-roll-btn">Roll</button>
-				
+				<button id="sw_roll" class="btn sw-roll-btn">Roll</button>				
 			</div>
 	    </div>
 
@@ -163,12 +170,18 @@
 
 </body>
 <script type="text/javascript">
-$(document).ready(function(e) {
+$(document).ready(function(e) {	
+
+	var slackLink = <%- JSON.stringify(slackLink) %>; // should come from somewhere else?
+	var username;
+
+	// ----------------------------------------------------------- Standard rolls -----------------------------------------------------------
+
 	function diceRoll(number, min, max) {
 		var diceRunningTotal = 0;
 		// console.log("Rolling a D" + max);
 		for (var numberOfRolls = 0; numberOfRolls < number; numberOfRolls++) {
-			var aSingleDie = (Math.random() * ((max + 1) - min) + min);
+			let aSingleDie = (Math.random() * ((max + 1) - min) + min);
 			aSingleDie = Math.floor(aSingleDie);		
 			// console.log("You rolled a " + aSingleDie);
 			diceRunningTotal += aSingleDie;
@@ -181,19 +194,15 @@ $(document).ready(function(e) {
 
 	function buildPayload(diceType, numberRolled, username = "dicebot") {
 		var payload = 'payload={';
-		payload += '"channel": "#test"';
+		payload += '"channel": "#rolldembones"';
 		payload += ',"username": "' + username + '"';
 		payload += ',"icon_emoji": ":game_die:"';
-		payload += ',"text": "Rolled ' + diceType + ' for a result of: *' + numberRolled  + '*"';	
-		payload += ',"image_url": "http://ourgaming.herokuapp.com/static/triumph.png"',
+		payload += ',"text": "Rolled ' + diceType + ' for a result of: *' + numberRolled  + '*"';
 		payload += '}';
 		return payload;
 	}
-
-	var slackLink = <%- JSON.stringify(slackLink) %>; // should come from somewhere else?
+	
 	var rollResult;
-	var username;
-
 
 	$(".roll-btn").click(function() {
 		var btn_id = this.id;
@@ -215,12 +224,102 @@ $(document).ready(function(e) {
 		);
 		console.log(payload);
 	});
+	// --------------------------------------------------------- End Standard rolls ---------------------------------------------------------
 
-	var diceTypeTrack = ["sw_boost", "sw_ability", "sw_proficiency", "sw_setback", "sw_difficulty", "sw_challenge"];
+	
+
+	// ----------------------------------------------------------- SW Rolls -----------------------------------------------------------
+	function swDiceRoll(activeDice) {
+		var diceRunningTotal = {"success": 0, "advantage": 0, "triumph": 0, "failure": 0, "threat": 0, "despair": 0};
+
+		for (var swDiceType in activeDice) {
+			let val = activeDice[swDiceType];
+			//  console.log(swDiceType + ": " + val);
+		}
+
+		for (var swDiceType in activeDice) {		
+			var rolls = activeDice[swDiceType];
+			// console.log("rolls: " + rolls);
+			for (var numberOfRolls = 0; numberOfRolls < rolls; numberOfRolls++) {
+				let aSingleDie = (Math.random() * ((diceTypeTrack[swDiceType] + 1) - 1) + 1);
+				aSingleDie = Math.floor(aSingleDie);		
+				console.log("Your dice is: " + swDiceType + ", " + "You rolled a " + aSingleDie);
+				let results = getDiceFaces(swDiceType, aSingleDie);
+				for (var result in results) {
+					let symbol = results[result];
+					console.log("result: " + results[result]);
+					// if (symbol == "success") { diceRunningTotal["success"] += 1; }
+					// if (symbol == "advantage") { diceRunningTotal["advantage"] += 1; }
+					// if (symbol == "triumph") { diceRunningTotal["triumph"] += 1; }
+					// if (symbol == "failure") { diceRunningTotal["failure"] += 1; }
+					// if (symbol == "threat") { diceRunningTotal["threat"] += 1; }
+					// if (symbol == "despair") { diceRunningTotal["despair"] += 1; }
+					diceRunningTotal[symbol]++;
+
+					// add extra success or failiure for triumphs and despair
+					if (symbol == "triumph") { diceRunningTotal["success"]++; }
+					if (symbol == "despair") { diceRunningTotal["failure"]++; }
+				}
+
+			}
+
+		}
+
+	console.log(diceRunningTotal);		
+	var finalRunningTotal = adjustDiceTotals(diceRunningTotal);
+	console.log(finalRunningTotal);
+	return finalRunningTotal;
+
+	}
+
+	function adjustDiceTotals(diceRunningTotal) {
+		if (diceRunningTotal["success"] > diceRunningTotal["failure"] ) {
+			diceRunningTotal["success"] -= diceRunningTotal["failure"];
+			diceRunningTotal["failure"] = 0;
+		  } else if (diceRunningTotal["failure"] > diceRunningTotal["success"] ) {
+			diceRunningTotal["failure"] -= diceRunningTotal["success"];
+			diceRunningTotal["success"] = 0;
+		  } else {
+			  diceRunningTotal["success"] = 0;
+			  diceRunningTotal["failure"] = 0;
+		  }
+
+		if (diceRunningTotal["advantage"] > diceRunningTotal["threat"] ) {
+			diceRunningTotal["advantage"] -= diceRunningTotal["threat"];
+			diceRunningTotal["threat"] = 0;
+		  } else if (diceRunningTotal["threat"] > diceRunningTotal["advantage"] ) {
+			diceRunningTotal["threat"] -= diceRunningTotal["advantage"];
+			diceRunningTotal["advantage"] = 0;
+		  } else {
+			  diceRunningTotal["advantage"] = 0;
+			  diceRunningTotal["threat"] = 0;
+		  }
+		
+		return diceRunningTotal;
+
+	}
+
+	function getDiceFaces(type, side) {
+		var swDiceJson = { 
+			"dieType" : {
+				"sw_boost" : {"1":[], "2":[], "3":["success"], "4":["success", "advantage"], "5":["advantage", "advantage"], "6":["advantage"]},
+				"sw_ability" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["advantage"], "6":["advantage"], "7":["success", "advantage"], "8":["advantage", "advantage"]},
+				"sw_proficiency" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["success", "success"], "6":["advantage"], "7":["success", "advantage"], "8":["success", "advantage"], "9":["success", "advantage"], "10":["advantage", "advantage"], "11":["advantage", "advantage"], "12":["triumph"]},
+				"sw_setback" : {"1":[], "2":[], "3":["failure"], "4":["failure"], "5":["threat"], "6":["threat"]},
+				"sw_difficulty" : {"1":[], "2":["failure"], "3":["failure", "failure"], "4":["threat"], "5":["threat"], "6":["threat"], "7":["threat", "threat"], "8":["failure", "threat"]},
+				"sw_challenge" : {"1":[], "2":["failure"], "3":["failure"], "4":["failure", "failure"], "5":["failure", "failure"], "6":["threat"], "7":["threat"], "8":["failure", "threat"], "9":["failure", "threat"], "10":["threat", "threat"], "11":["threat", "threat"], "12":["despair"]}
+			}
+		};
+		return swDiceJson["dieType"][type][side];
+	}
+
+	var diceTypeTrack = {"sw_boost": 6, "sw_ability": 8, "sw_proficiency": 12, "sw_setback": 6, "sw_difficulty": 8, "sw_challenge": 12};
 	var dicePositionTrack = [1,2,3,4,5,6];
 	var diceActiveLevel = {"sw_boost" : 0, "sw_ability" : 0, "sw_proficiency" : 0, "sw_setback" : 0, "sw_difficulty" : 0, "sw_challenge" : 0};
+	var diceColorMap = {"sw_boost": "Blue", "sw_ability": "Green", "sw_proficiency": "Yellow", "sw_setback": "Black", "sw_difficulty": "Purple", "sw_challenge": "Red"};
 	
-	function toggleClasses(elementId, position){
+	
+	function toggleClassesOnSwDice(elementId, position){
 		console.log("input: " + elementId + ", " + position);
 		var newDiceCountValue = position;
 		
@@ -245,15 +344,86 @@ $(document).ready(function(e) {
 		console.log(diceActiveLevel);
 	}
 
-	diceTypeTrack.forEach( function(dieType) {
-		dicePositionTrack.forEach( function(position){
-			$("#"+ dieType + position).click(function(){
-				toggleClasses(dieType, position);
+	
+	function addClickActionToSwDiceIcons(diceTypeTrack) {
+		let typeHolderArr = [];
+		for (var type in diceTypeTrack) {
+			typeHolderArr.push(type);
+		}
+		typeHolderArr.forEach( function(dieType) {
+			dicePositionTrack.forEach( function(position){
+				$("#"+ dieType + position).click(function(){
+					toggleClassesOnSwDice(dieType, position);
+				});
 			});
 		});
+	}
+	addClickActionToSwDiceIcons(diceTypeTrack);
+
+	function buildSwPayload(diceActiveLevel, rollResults, username = "dicebot") {
+		var payload = 'payload={';
+		payload += '"channel": "#rolldembones"';
+		payload += ',"username": "' + username + '"';
+		payload += ',"icon_emoji": ":sw_lightsabers:"';
+		payload += ',"text": "';
+
+		payload += 'Rolled:';
+		
+		for (var die in diceActiveLevel) {
+			let dieVal = diceActiveLevel[die];
+			if (diceActiveLevel[die] > 0 ) {
+				payload += ' ' + diceActiveLevel[die] + ' ' +  diceColorMap[die];
+			}			
+		}
+		payload += '. ';
+		
+
+		console.log(rollResults.success);
+		if (rollResults.success > 0) {
+			payload += '*Success*';
+		} else {
+			payload += '*Failure*';			
+		}
+
+		if (rollResults.success > 0 || rollResults.advantage > 0 || rollResults.failure > 0 || rollResults.threat > 0  || rollResults.triumph > 0  || rollResults.despair > 0) {
+			payload += ': ';
+		} else {
+			payload += '.';
+		}
+
+		for (var resultKey in rollResults) {
+			let resultVal = rollResults[resultKey];
+			for (var r = 0; r < resultVal; r++)
+			payload += ':sw_' + resultKey + ':'
+		}
+		
+		payload += '"';
+		payload += '}';
+		return payload;
+	}
+
+	$("#sw_roll").click(function() {
+	// console.log(swDiceRoll(diceActiveLevel));
+		var diceCounter = 0;
+		$.each(diceActiveLevel, function(index, value) {
+			diceCounter += value;
+		});
+		if (diceCounter !== 0) {
+
+			var rollResults = swDiceRoll(diceActiveLevel);
+
+			username = $('#nameInput').val();
+			if (username === "") {
+				username = undefined;
+			}
+			var payload = buildSwPayload(diceActiveLevel, rollResults, username);
+			$.post(slackLink, payload
+			);
+			console.log(payload);
+		}
 	});
-
-
+	// --------------------------------------------------------- End SW rolls ---------------------------------------------------------
+	
 });
 </script>
 </html>
