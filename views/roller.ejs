@@ -479,6 +479,23 @@ $(document).ready(function(e) {
 		);
 
 		console.log(payload);
+	});	
+
+	$("#sw_percentile").on("click touch", function() {
+		
+		var btn_id = "percentiles";
+		
+
+		rollResult = diceRoll(1,1,100);
+		
+		username = $('#nameInput').val();
+		if (username === "") {
+			username = undefined;
+		}
+		var payload = buildPayload(btn_id, rollResult, username);
+		$.post(slackLink, payload
+		);
+		console.log(payload);
 	});
 	// --------------------------------------------------------- End SW rolls ---------------------------------------------------------
 	
