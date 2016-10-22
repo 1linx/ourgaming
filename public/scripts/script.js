@@ -1,7 +1,6 @@
 document.onclick = function () {
 	// change div
 }
-div.onclick = function () {};
 
 $(document).ready(function(e) {	
 
