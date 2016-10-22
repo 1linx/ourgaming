@@ -1,4 +1,9 @@
 $(document).ready(function(e) {	
+    document.onclick = function () {
+        // change div
+    }
+
+    $(".container").onclick = function () {}
 
 	var username;
 
@@ -178,10 +183,6 @@ $(document).ready(function(e) {
 		diceActiveLevel[elementId] = newDiceCountValue;
 		console.log(diceActiveLevel);
 	}
-
-    document.onclick = function () {
-        // change div
-    }
 	
 	function addClickActionToSwDiceIcons(diceTypeTrack) {
 		let typeHolderArr = [];
@@ -190,7 +191,6 @@ $(document).ready(function(e) {
 		}
 		typeHolderArr.forEach( function(dieType) {
 			dicePositionTrack.forEach( function(position){
-                $("#"+ dieType + position).onclick = function() {}; // this is the ios fix, allegedly
 				$("#"+ dieType + position).on("click touch", function(){
 					toggleClassesOnSwDice(dieType, position);
 				});
