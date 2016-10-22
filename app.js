@@ -27,6 +27,11 @@ app.get('/', function (req, res) {
     });
 });
 
+// test route
+// app.get('/test', function (req, res) {
+//     res.render('test');
+// });
+
 // route that listens for a POST to /hello
 app.post('/hello', hellobot);
 

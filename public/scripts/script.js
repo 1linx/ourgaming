@@ -1,11 +1,37 @@
 $(document).ready(function(e) {	
-    document.onclick = function () {
-        // change div
-    }
 
-    $(".container").onclick = function () {}
-
-	var username;
+	var username;	
+	var diceTypeTrack = {"sw_boost": 6, "sw_ability": 8, "sw_proficiency": 12, "sw_setback": 6, "sw_difficulty": 8, "sw_challenge": 12};
+	var dicePositionTrack = [1,2,3,4,5,6];
+	var diceActiveLevel = {"sw_boost" : 0, "sw_ability" : 0, "sw_proficiency" : 0, "sw_setback" : 0, "sw_difficulty" : 0, "sw_challenge" : 0};
+	var diceColorMap = {"sw_boost": "Blue", "sw_ability": "Green", "sw_proficiency": "Yellow", "sw_setback": "Black", "sw_difficulty": "Purple", "sw_challenge": "Red"};
+	var swDiceJson = { 
+		"dieType" : {
+			"sw_boost" : {"1":[], "2":[], "3":["success"], "4":["success", "advantage"], "5":["advantage", "advantage"], "6":["advantage"]},
+			"sw_ability" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["advantage"], "6":["advantage"], "7":["success", "advantage"], "8":["advantage", "advantage"]},
+			"sw_proficiency" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["success", "success"], "6":["advantage"], "7":["success", "advantage"], "8":["success", "advantage"], "9":["success", "advantage"], "10":["advantage", "advantage"], "11":["advantage", "advantage"], "12":["triumph"]},
+			"sw_setback" : {"1":[], "2":[], "3":["failure"], "4":["failure"], "5":["threat"], "6":["threat"]},
+			"sw_difficulty" : {"1":[], "2":["failure"], "3":["failure", "failure"], "4":["threat"], "5":["threat"], "6":["threat"], "7":["threat", "threat"], "8":["failure", "threat"]},
+			"sw_challenge" : {"1":[], "2":["failure"], "3":["failure"], "4":["failure", "failure"], "5":["failure", "failure"], "6":["threat"], "7":["threat"], "8":["failure", "threat"], "9":["failure", "threat"], "10":["threat", "threat"], "11":["threat", "threat"], "12":["despair"]},
+			"sw_force" : {"1":["black"], "2":["black"], "3":["black"], "4":["black"], "5":["black"], "6":["black"], "7":["black", "black"], "8":["white"], "9":["white"], 
+			"10":["white", "white"], "11":["white", "white"], "12":["white", "white"]}
+		}
+	}
+	var forceQuotes = {
+		"1": "The dark side I sense in you.", 
+		"2": "Don't try to frighten us with your sorcerer's ways.", 
+		"3": "Your hate has made you powerful.", 
+		"4": "If once you start down the dark path, forever it will dominate your destiny.", 
+		"5": "You don't know the power of the dark side.", 
+		"6": "Your feeble skills are no match for the power of the dark side!", 
+		"7": "Beware of the dark side.", 
+		"8": "Hokey religions and ancient weapons are no match for a good blaster at your side, kid.", 
+		"9": "The force is strong with this one.", 
+		"10": "There is something strong than fear — far stronger. The Force.", 
+		"11": "My ally is the Force, and a powerful ally it is.",
+		"12": "I am one with the Force, and the Force will guide me."
+	}	
+	
 
 	// ----------------------------------------------------------- Standard rolls -----------------------------------------------------------
 
@@ -13,7 +39,7 @@ $(document).ready(function(e) {
 		var diceRunningTotal = 0;
 		// console.log("Rolling a D" + max);
 		for (var numberOfRolls = 0; numberOfRolls < number; numberOfRolls++) {
-			let aSingleDie = (Math.random() * ((max + 1) - min) + min);
+			var aSingleDie = (Math.random() * ((max + 1) - min) + min);
 			aSingleDie = Math.floor(aSingleDie);		
 			// console.log("You rolled a " + aSingleDie);
 			diceRunningTotal += aSingleDie;
@@ -24,7 +50,7 @@ $(document).ready(function(e) {
 
 	}
 
-	function buildPayload(diceType, numberRolled, username = "dicebot") {
+	function buildPayload(diceType, numberRolled, username) {
 		var payload = 'payload={';
 		payload += '"channel": "#rolldembones"';
 		payload += ',"username": "' + username + '"';
@@ -36,7 +62,7 @@ $(document).ready(function(e) {
 	
 	var rollResult;
 
-	$(".roll-btn").on("click touch", function() {
+	$(".roll-btn").on("tap", function() {
 		var btn_id = this.id;
 		var diceNum = parseInt(btn_id[0]);
 		var diceMax = parseInt(btn_id.slice(2));
@@ -49,7 +75,7 @@ $(document).ready(function(e) {
 		
 		username = $('#nameInput').val();
 		if (username === "") {
-			username = undefined;
+			username = "dicebot";
 		}
 		var payload = buildPayload(btn_id, rollResult, username);
 		$.post(slackLink, payload
@@ -63,7 +89,7 @@ $(document).ready(function(e) {
 		var diceRunningTotal = {"success": 0, "advantage": 0, "triumph": 0, "failure": 0, "threat": 0, "despair": 0};
 
 		for (var swDiceType in activeDice) {
-			let val = activeDice[swDiceType];
+			var val = activeDice[swDiceType];
 			//  console.log(swDiceType + ": " + val);
 		}
 
@@ -71,12 +97,12 @@ $(document).ready(function(e) {
 			var rolls = activeDice[swDiceType];
 			// console.log("rolls: " + rolls);
 			for (var numberOfRolls = 0; numberOfRolls < rolls; numberOfRolls++) {
-				let aSingleDie = (Math.random() * ((diceTypeTrack[swDiceType] + 1) - 1) + 1);
+				var aSingleDie = (Math.random() * ((diceTypeTrack[swDiceType] + 1) - 1) + 1);
 				aSingleDie = Math.floor(aSingleDie);		
 				console.log("Your dice is: " + swDiceType + ", " + "You rolled a " + aSingleDie);
-				let results = getDiceFaces(swDiceType, aSingleDie);
+				var results = getDiceFaces(swDiceType, aSingleDie);
 				for (var result in results) {
-					let symbol = results[result];
+					var symbol = results[result];
 					console.log("result: " + results[result]);					
 					diceRunningTotal[symbol]++;
 
@@ -124,40 +150,8 @@ $(document).ready(function(e) {
 	}
 
 	function getDiceFaces(type, side) {
-		var swDiceJson = { 
-			"dieType" : {
-				"sw_boost" : {"1":[], "2":[], "3":["success"], "4":["success", "advantage"], "5":["advantage", "advantage"], "6":["advantage"]},
-				"sw_ability" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["advantage"], "6":["advantage"], "7":["success", "advantage"], "8":["advantage", "advantage"]},
-				"sw_proficiency" : {"1":[], "2":["success"], "3":["success"], "4":["success", "success"], "5":["success", "success"], "6":["advantage"], "7":["success", "advantage"], "8":["success", "advantage"], "9":["success", "advantage"], "10":["advantage", "advantage"], "11":["advantage", "advantage"], "12":["triumph"]},
-				"sw_setback" : {"1":[], "2":[], "3":["failure"], "4":["failure"], "5":["threat"], "6":["threat"]},
-				"sw_difficulty" : {"1":[], "2":["failure"], "3":["failure", "failure"], "4":["threat"], "5":["threat"], "6":["threat"], "7":["threat", "threat"], "8":["failure", "threat"]},
-				"sw_challenge" : {"1":[], "2":["failure"], "3":["failure"], "4":["failure", "failure"], "5":["failure", "failure"], "6":["threat"], "7":["threat"], "8":["failure", "threat"], "9":["failure", "threat"], "10":["threat", "threat"], "11":["threat", "threat"], "12":["despair"]},
-				"sw_force" : {"1":["black"], "2":["black"], "3":["black"], "4":["black"], "5":["black"], "6":["black"], "7":["black", "black"], "8":["white"], "9":["white"], 
-				"10":["white", "white"], "11":["white", "white"], "12":["white", "white"]}
-			}
-		};
 		return swDiceJson["dieType"][type][side];
-	}
-
-	var diceTypeTrack = {"sw_boost": 6, "sw_ability": 8, "sw_proficiency": 12, "sw_setback": 6, "sw_difficulty": 8, "sw_challenge": 12};
-	var dicePositionTrack = [1,2,3,4,5,6];
-	var diceActiveLevel = {"sw_boost" : 0, "sw_ability" : 0, "sw_proficiency" : 0, "sw_setback" : 0, "sw_difficulty" : 0, "sw_challenge" : 0};
-	var diceColorMap = {"sw_boost": "Blue", "sw_ability": "Green", "sw_proficiency": "Yellow", "sw_setback": "Black", "sw_difficulty": "Purple", "sw_challenge": "Red"};
-	var forceQuotes = {
-	"1": "The dark side I sense in you.", 
-	"2": "Don't try to frighten us with your sorcerer's ways.", 
-	"3": "Your hate has made you powerful.", 
-	"4": "If once you start down the dark path, forever it will dominate your destiny.", 
-	"5": "You don't know the power of the dark side.", 
-	"6": "Your feeble skills are no match for the power of the dark side!", 
-	"7": "Beware of the dark side.", 
-	"8": "Hokey religions and ancient weapons are no match for a good blaster at your side, kid.", 
-	"9": "The force is strong with this one.", 
-	"10": "There is something strong than fear — far stronger. The Force.", 
-	"11": "My ally is the Force, and a powerful ally it is.",
-	"12": "I am one with the Force, and the Force will guide me."
-}
-	
+	}	
 	
 	function toggleClassesOnSwDice(elementId, position){
 		console.log("input: " + elementId + ", " + position);
@@ -185,13 +179,13 @@ $(document).ready(function(e) {
 	}
 	
 	function addClickActionToSwDiceIcons(diceTypeTrack) {
-		let typeHolderArr = [];
+		var typeHolderArr = [];
 		for (var type in diceTypeTrack) {
 			typeHolderArr.push(type);
 		}
 		typeHolderArr.forEach( function(dieType) {
 			dicePositionTrack.forEach( function(position){
-				$("#"+ dieType + position).on("click touch", function(){
+				$("#"+ dieType + position).on("tap", function(){
 					toggleClassesOnSwDice(dieType, position);
 				});
 			});
@@ -200,7 +194,7 @@ $(document).ready(function(e) {
 	addClickActionToSwDiceIcons(diceTypeTrack);
 
 	// build payload to sent to Slack link
-	function buildSwPayload(diceActiveLevel, rollResults, username = "dicebot", force = false) {
+	function buildSwPayload(diceActiveLevel, rollResults, username, force) {
 
 		// different function for force dice. If not force dice do this...
 		if (force == false) {
@@ -215,7 +209,7 @@ $(document).ready(function(e) {
 			
 			// outputs all the dice rolled by the user
 			for (var die in diceActiveLevel) {
-				let dieVal = diceActiveLevel[die];
+				var dieVal = diceActiveLevel[die];
 				if (diceActiveLevel[die] > 0 ) {
 					payload += ' ' + diceActiveLevel[die] + ' ' +  diceColorMap[die];
 				}			
@@ -239,7 +233,7 @@ $(document).ready(function(e) {
 
 			// inserts name of dice (e.g. "advantage") and wraps it up in the emoji format (e.g. :sw_advantage:)
 			for (var resultKey in rollResults) {
-				let resultVal = rollResults[resultKey];
+				var resultVal = rollResults[resultKey];
 				for (var r = 0; r < resultVal; r++)
 				payload += ':sw_' + resultKey + ':'
 			}
@@ -263,7 +257,7 @@ $(document).ready(function(e) {
 			}
 
 			for (var result in rollResults) {	
-				let resultVal = rollResults[result]					
+				var resultVal = rollResults[result]					
 				payload += ':sw_f_' + resultVal + ':'
 			}		
 			
@@ -273,7 +267,7 @@ $(document).ready(function(e) {
 		}
 	}
 
-	$("#sw_roll").on("click touch", function() {
+	$("#sw_roll").on("tap", function() {
 
 		// make sure some dice have actually been selected before firing a post to slack...
 		var diceCounter = 0;
@@ -287,9 +281,9 @@ $(document).ready(function(e) {
 			var rollResults = swDiceRoll(diceActiveLevel);
 
 			username = $('#nameInput').val();
-			if (username === "") { username = undefined; }
+			if (username === "") { username = "R2D20"; }
 
-			var payload = buildSwPayload(diceActiveLevel, rollResults, username);
+			var payload = buildSwPayload(diceActiveLevel, rollResults, username, false); // false refers to 'force' boolean used by force dice
 			$.post(slackLink, payload
 			);
 
@@ -297,13 +291,13 @@ $(document).ready(function(e) {
 		}
 	});
 
-	$("#sw_force").on("click touch", function() {
+	$("#sw_force").on("tap", function() {
 
 		// use simple roller for this
 		var rollResult = getDiceFaces("sw_force", diceRoll(1,1,12));		
 
 		username = $('#nameInput').val();
-		if (username === "") { username = undefined; }
+		if (username === "") { username = "R2D20"; }
 
 		// shares same buildSwPayload function as other dice, so pass empty array because there is no dice active level, the result array, username and force == true.
 		var payload = buildSwPayload([], rollResult, username, true);
@@ -313,7 +307,7 @@ $(document).ready(function(e) {
 		console.log(payload);
 	});	
 
-	$("#sw_percentile").on("click touch", function() {
+	$("#sw_percentile").on("tap", function() {
 		
 		var btn_id = "percentiles";
 		
@@ -322,13 +316,15 @@ $(document).ready(function(e) {
 		
 		username = $('#nameInput').val();
 		if (username === "") {
-			username = undefined;
+			username = "R2D20";
 		}
 		var payload = buildPayload(btn_id, rollResult, username);
 		$.post(slackLink, payload
 		);
 		console.log(payload);
 	});
+
+	
 	// --------------------------------------------------------- End SW rolls ---------------------------------------------------------
 	
 });

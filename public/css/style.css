@@ -33,3 +33,7 @@
 .faded {
     opacity: 0.5;
 }
+
+.clickable_element {
+    cursor: pointer; 
+}
