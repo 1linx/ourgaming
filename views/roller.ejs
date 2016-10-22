@@ -13,10 +13,12 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+	<!-- static link to custome site css -->
 	<link rel="stylesheet" href="static/css/style.css"></style>
 
 	<script>
-			var slackLink = <%- JSON.stringify(slackLink) %>;
+		// need this here to get data from the controller and pass it into script at bottom of page. Doesn't work in the static js file.
+		var slackLink = <%- JSON.stringify(slackLink) %>;
 	</script>
 
 	<title>Dice roller</title>
