@@ -59,10 +59,15 @@ $(document).ready(function(e) {
 
 		// only show modifier value if set
 		if (modifierValue != 0) {
+
 			payload += encodeURIComponent('+') + modifierValue;
+			payload += ' for a result of: *' + (numberRolled + modifierValue)  + '*"';
+
+		} else {
+			payload += ' for a result of: *' + numberRolled  + '*"';
+
 		}
 
-		payload += ' for a result of: *' + numberRolled  + '*"';
 		payload += '}';
 		return payload;
 	}
