@@ -318,6 +318,8 @@ $(document).ready(function(e) {
 		if (username === "") {
 			username = "R2D20";
 		}
+
+		console.log("btn_id: " + btn_id + ", rollResult: " + rollResult + ", username:" + username);
 		var payload = buildPayload(btn_id, rollResult, username);
 		$.post(slackLink, payload
 		);
