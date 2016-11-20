@@ -331,7 +331,7 @@ $(document).ready(function(e) {
 			username = "R2D20";
 		}
 
-		// console.log("btn_id: " + btn_id + ", rollResult: " + rollResult + ", username:" + username);
+		// Note: empty array needed in buildPayload function, otherwise it will attempt to use username as modifier.
 		var payload = buildPayload(btn_id, rollResult, "", username);
 		$.post(slackLink, payload
 		);
