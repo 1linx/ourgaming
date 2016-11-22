@@ -1,19 +1,24 @@
 {
-  "name": "getting-started-with-slack-bots",
-  "version": "0.0.1",
-  "description": "",
+  "name": "slack-dice-bot",
+  "version": "0.1.0",
+  "description": "A dice rolling slack bot with front end, with thanks to Taylor Brennan for the original dice rolling slack bot tutorial: https://github.com/taylorjbrennan/getting-started-with-slack-bots.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/taylorjbrennan/getting-started-with-slack-bots.git"
+    "url": "https://github.com/1linx/dice-rolling-slack-bot.git"
   },
-  "author": "Taylor Brennan <taylor.j.brennan@gmail.com>",
+  "author": "Al Warmington <apwarmington@gmail.com>",
   "dependencies": {
     "body-parser": "^1.10.0",
     "ejs": "^2.5.2",
     "express": "^4.10.4",
     "request": "^2.69.0"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-ruby-sass": "*",
+    "gulp-sourcemaps": "*"
   }
 }
