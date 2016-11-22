@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     res.sendFile(__dirname + '/index.html');
 // });
 
-// testing views
+// new roller
 var slackLink = "https://hooks.slack.com/services/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";
 app.get('/', function (req, res) {
     res.render('roller', {
@@ -27,18 +27,13 @@ app.get('/', function (req, res) {
     });
 });
 
-// test route
-// app.get('/test', function (req, res) {
-//     res.render('test');
-// });
-
 // route that listens for a POST to /hello
 app.post('/hello', hellobot);
 
 // route that listens for a POST to /roll
 app.post('/roll', dicebot);
 
-//static route for images
+//static route for css, javascript, images
 // app.use(express.static('./imgs'));
 app.use('/static', express.static('./public'));
 
