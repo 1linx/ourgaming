@@ -52,7 +52,7 @@ $(document).ready(function(e) {
 
 	function buildPayload(diceType, numberRolled, modifierValue, username) {
 		var payload = 'payload={';
-		payload += '"channel": "#test"';
+		payload += '"channel": "#rolldembones"';
 		payload += ',"username": "' + username + '"';
 		payload += ',"icon_emoji": ":game_die:"';
 		payload += ',"text": "Rolled ' + diceType;
@@ -228,7 +228,7 @@ $(document).ready(function(e) {
 		if (force == false) {
 
 			var payload = 'payload={';
-			payload += '"channel": "#test"';
+			payload += '"channel": "#rolldembones"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -273,7 +273,7 @@ $(document).ready(function(e) {
 		} else { // ... Otherwise it is a force dice, so do this
 
 			var payload = 'payload={';
-			payload += '"channel": "#test"';
+			payload += '"channel": "#rolldembones"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
