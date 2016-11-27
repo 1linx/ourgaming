@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
     // jshint = require('gulp-jshint'),
     sass = require('gulp-ruby-sass'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    nodemon = require('gulp-nodemon');
     // webserver = require('gulp-webserver');
 
 // gulp.task('js', function() {
@@ -27,6 +28,14 @@ gulp.task('watch', function() {
   gulp.watch(['sass/**/*'], ['sass']);
 });
 
+gulp.task('start', function () {
+  nodemon({
+    script: 'app.js', 
+    ext: 'js html', 
+    env: { 'NODE_ENV': 'development' }
+  });
+});
+
 // gulp.task('webserver', function() {
 //     gulp.src('builds/sassEssentials/')
 //         .pipe(webserver({
@@ -36,4 +45,5 @@ gulp.task('watch', function() {
 // });
 
 // gulp.task('default', ['sass', 'watch', 'webserver']);
-gulp.task('default', ['sass', 'watch']);
+// gulp.task('default', ['sass', 'watch']);
+gulp.task('default', ['sass', 'watch', 'start']);

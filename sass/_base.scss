@@ -1,0 +1,48 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1.8rem;
+  font-family: $font-main;
+  color: $mainColor;
+  background-color: $mainBackgroundColor;
+}
+
+// $color-headlines: $rgba-complement-0, $rgba-complement-1, $rgba-complement-2, $rgba-complement-3, $rgba-complement-4;
+
+
+// @for $item from 1 through length($color-headlines) {
+// 	h#{$item} {
+// 		color: nth($color-headlines, $item);
+// 	}
+// }
+
+h1 {
+  font-size: 1.5em;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 10;
+  font-family: $font-highlight;
+  color: $colorHeadlines;
+}
+
+h5, h6 {
+  font-family: $font-main;
+}
+
+input {
+  font-family: $font-main;
+}
+
+.nav a {
+  font-weight: 100;
+}
+
+.tab-content {
+  background-color: white;
+}

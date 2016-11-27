@@ -1,35 +1,43 @@
-#swDice h5, #swDice h6 {
-    text-align: center;
-}
+// @import "reset.scss";
+@import "normalize";
+@import "variables";
+@import "mixins"; 
+@import "base"; 
+@import "interface";
 
-.pos-dice {
-    background-color: #EEFFEE;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}	
 
-.neg-dice {
-    background-color: #FFEEEE;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+@import "modules/backgrounds";
+@import "modules/media";
+@import "modules/tables";
+@import "modules/navigation";
 
-.dice-images {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    cursor: pointer; 
-}
-.sw-dice-roll-btn {
+
+// .pos-dice {
+//     background-color: #EEFFEE;
+    // display: block;
+    // margin-left: auto;
+    // margin-right: auto;
+// }	
+
+// .neg-dice {
+//     background-color: #FFEEEE;
+//     display: block;
+//     margin-left: auto;
+//     margin-right: auto;
+// }
+
+// .dice-images {
+//     margin-top: 5px;
+//     margin-bottom: 5px;
+//     cursor: pointer; 
+// }
+// .sw-dice-roll-btn {
     
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:10px;
-    margin-bottom:10px;
-}
+//     display: block;
+//     margin-left: auto;
+//     margin-right: auto;
+//     margin-top:10px;
+//     margin-bottom:10px;
+// }
 
-.faded {
-    opacity: 0.5;
-}
+

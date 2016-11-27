@@ -1,0 +1,51 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.media {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	.item {
+		margin-top: 20px;
+		padding-bottom: 20px;
+		border-top: 1px dotted $tertiaryColor;
+		padding-top: 20px;
+		&:hover {
+			background: $rgba-secondary-2-2;
+		}
+		&:last-of-type {
+			border-bottom: 1px dotted $tertiaryColor;
+			// padding-bottom: 20px;
+		}
+		@include clearfix;
+	}
+
+	.head {
+		margin: 0;
+		padding: 10px;
+		color: $colorHeadlines;
+		font-size: 2rem;
+
+		#typography &  {
+			color: $rgba-secondary-1-2;
+		}
+	}
+
+	p {
+		margin: 0;
+		font-size: 1.5rem;
+	}
+
+	img {
+		float: left;
+		margin-right: 10px;
+	}
+
+	a {
+		text-decoration: none;
+		color: $mainColor;
+	}
+}

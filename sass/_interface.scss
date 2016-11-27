@@ -1,0 +1,153 @@
+$color-btn-text: white;
+$color-btn-default: $rgba-primary-0;
+$color-btn-hot: $rgba-secondary-2-0;
+$color-btn-cool: $rgba-secondary-1-0;
+$roundness: 20px 0 20px 0;
+
+%btn {
+	display: inline-block;
+	padding: 6px 12px;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	border: none;
+	border-radius: 4px;
+	font-family: $font-highlight;
+	font-weight: bold;
+	user-select: none;
+	color: $color-btn-text;
+}
+
+body, .container {
+	background-color: white;
+	height: 100vh;
+}
+
+.faded {
+    opacity: 0.6;
+}
+
+.pos-dice {
+    background-color: #EEFFEE;
+}
+
+.neg-dice {
+    background-color: #FFEEEE;
+}
+
+.other-dice {
+    background-color: #EEEEEE;
+}
+
+#swDice h5, #swDice h6 {
+    text-align: center;
+}
+
+
+$color-btns: (
+	default: $color-btn-default,
+	hot: $color-btn-hot,
+	cool: $color-btn-cool,
+	awesome: purple
+);
+
+@each $key, $value in $color-btns {
+	.btn-#{$key} {
+		@extend %btn;
+		background-color: $value;
+	}
+}
+
+// $color-btn-names: "default", "hot", "cool";
+// $color-btn-values: $color-btn-default, $color-btn-hot, $color-btn-cool;
+
+// @each $name in $color-btn-names {
+// 	$i: index($color-btn-names, $name);
+// 	/* The value of $i is: #{$i} */
+// 	.btn-#{$name} {
+// 		@extend %btn;
+// 		background-color: nth($color-btn-values, $i);
+// 	}
+// }
+
+// .btn-default {
+// 	@extend %btn;
+// 	background: $color-btn-default;
+// }
+// .btn-hot {
+// 	@extend %btn;
+// 	background: $color-btn-hot;
+// }
+// .btn-cool {
+// 	@extend %btn;
+// 	background: $color-btn-cool;
+// }
+
+
+.pos-dice, .neg-dice {
+	@include clearfix;
+	.dice-images {
+		float:left;
+		cursor: pointer; 
+		@media (min-width: 991px) {
+			@include imagegrid(3,2%);
+		}
+		@media (max-width: 991px) {
+			@include imagegrid(6,0);
+		}
+		
+
+	}
+	img {
+		display: block;
+		// border-radius: nth($roundness, 1);
+		max-width: 100%;
+	}
+}
+
+.other-dice {
+	@include clearfix;
+	.dice-images {
+		float:left;
+		cursor: pointer; 
+		@media (min-width: 990px) {
+			@include imagegrid(1,1%);
+		}
+		@media (max-width: 991px) {
+			width: 15%;
+			&:nth-child(n) {
+				margin-left: 17.5%;
+				margin-right: 35%;
+				margin-top: 1%;
+				margin-bottom: 1%;
+			}
+			&:nth-child(2n) {
+				margin-left: 0;
+				margin-right: 17.5%;
+				margin-bottom: 0;
+			}
+		}
+	}
+	img {
+		display: block;
+		// border-radius: nth($roundness, 1);
+		max-width: 100%;
+	}
+}
+
+.tab-content button {
+
+}
+
+#sw-results-box {
+	visibility: hidden;
+	width: 100%;
+	p {
+		background-color: $tertiaryBackgroundColor;
+		margin-top:2%;
+		margin-bottom:2%;
+		padding: 1% 1%;
+		color: $secondaryColor;
+	}
+}

@@ -52,7 +52,7 @@ $(document).ready(function(e) {
 
 	function buildPayload(diceType, numberRolled, modifierValue, username) {
 		var payload = 'payload={';
-		payload += '"channel": "#rolldembones"';
+		payload += '"channel": "#test"';
 		payload += ',"username": "' + username + '"';
 		payload += ',"icon_emoji": ":game_die:"';
 		payload += ',"text": "Rolled ' + diceType;
@@ -190,6 +190,7 @@ $(document).ready(function(e) {
 		console.log(diceActiveLevel);
 	}
 
+	// add color to dice when selected
 	function addClickActionToSwDiceIcons(diceTypeTrack) {
 		var typeHolderArr = [];
 		for (var type in diceTypeTrack) {
@@ -212,7 +213,7 @@ $(document).ready(function(e) {
 		if (force == false) {
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -236,7 +237,7 @@ $(document).ready(function(e) {
 				payload += '*Failure*';
 			}
 
-			// Ends witha full stop if no symbols to display
+			// Ends with a full stop if no symbols to display
 			if (rollResults.success > 0 || rollResults.advantage > 0 || rollResults.failure > 0 || rollResults.threat > 0  || rollResults.triumph > 0  || rollResults.despair > 0) {
 				payload += ': ';
 			} else {
@@ -247,17 +248,17 @@ $(document).ready(function(e) {
 			for (var resultKey in rollResults) {
 				var resultVal = rollResults[resultKey];
 				for (var r = 0; r < resultVal; r++)
-				payload += ':sw_' + resultKey + ':'
+				payload += ':sw_' + resultKey + ':';
 			}
 
 			payload += '"';
 			payload += '}';
 			return payload;
 
-		} else { // ... otherwise it is a force dice, so do this
+		} else { // ... Otherwise it is a force dice, so do this
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -270,13 +271,29 @@ $(document).ready(function(e) {
 
 			for (var result in rollResults) {
 				var resultVal = rollResults[result]
-				payload += ':sw_f_' + resultVal + ':'
+				payload += ':sw_f_' + resultVal + ':';
 			}
 
 			payload += '"';
 			payload += '}';
 			return payload;
 		}
+	}
+	function inserResultIntoPage(rollResults, username) {
+		var resultsBox = document.getElementById('sw-results-box');
+		var resultsMessage = "";
+		var resultsPlaceholder = document.getElementById('sw-results-placeholder');
+		for (var key in rollResults) {
+			console.log(key + ": " + rollResults[key]);
+			if (rollResults[key] !== 0) {
+				resultsMessage += rollResults[key] + " " + key + " ";
+			}
+		}
+		if (resultsMessage == "") {
+			resultsMessage = "A whole handful of nothing, sorry.";
+		}
+		resultsPlaceholder.innerHTML = username + " rolled: " + resultsMessage;
+		resultsBox.style.visibility="visible";
 	}
 
 	$("#sw_roll").on("tap", function() {
@@ -296,8 +313,8 @@ $(document).ready(function(e) {
 			if (username === "") { username = "R2D20"; }
 
 			var payload = buildSwPayload(diceActiveLevel, rollResults, username, false); // false refers to 'force' boolean used by force dice
-			$.post(slackLink, payload
-			);
+			inserResultIntoPage(rollResults, username);
+			$.post(slackLink, payload);
 
 			console.log(payload);
 		}

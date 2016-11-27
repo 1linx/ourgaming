@@ -1,0 +1,43 @@
+.table {
+	font-size: 1.5rem;
+	text-align: left;
+	width: 100%;
+
+	caption {
+		font-size: 2.5rem;
+		text-align: left;
+		padding-bottom: 5px;
+	}
+	
+	> thead,
+	> tbody,
+	> tfoot {
+		> tr {
+			&:hover {
+				background-color: darken(adjust-hue($mainBackgroundColor, -20deg), 10%)
+			}
+
+			&:nth-child(even) {
+				background-color: transparentize($color-even-cells, 0.8);
+				&:hover {
+					background-color: transparentize($color-even-cells, 0.3);
+				}
+			}
+			> th,
+			> td {
+				padding:10px;
+				border-bottom: 1px dotted $secondaryColor;
+			}	
+		}
+	}
+	> thead > tr {
+		background-color: $secondaryColor;
+		color: invert($secondaryColor);
+		> th {
+			border-bottom: 0;
+			&:hover {
+			background-color: complement($secondaryColor);
+			} 
+		}
+	}
+}
