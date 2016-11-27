@@ -91,7 +91,7 @@ $color-btns: (
 		float:left;
 		cursor: pointer; 
 		@media (min-width: 991px) {
-			@include imagegrid(3,2%);
+			@include imagegrid(6,1%);
 		}
 		@media (max-width: 991px) {
 			@include imagegrid(6,0);
@@ -112,7 +112,11 @@ $color-btns: (
 		float:left;
 		cursor: pointer; 
 		@media (min-width: 990px) {
-			@include imagegrid(1,1%);
+			width: 30%;
+			margin-left: 35%;
+			margin-right: 35%;
+			margin-top: 1%;
+			margin-bottom: 1%;
 		}
 		@media (max-width: 991px) {
 			width: 15%;
@@ -141,6 +145,18 @@ $color-btns: (
 }
 
 #sw-results-box {
+	visibility: hidden;
+	width: 100%;
+	p {
+		background-color: $tertiaryBackgroundColor;
+		margin-top:2%;
+		margin-bottom:2%;
+		padding: 1% 1%;
+		color: $secondaryColor;
+	}
+}
+
+#results-box {
 	visibility: hidden;
 	width: 100%;
 	p {

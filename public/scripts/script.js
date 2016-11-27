@@ -72,6 +72,20 @@ $(document).ready(function(e) {
 		return payload;
 	}
 
+	function insertResultIntoPage(diceMax, modifierValue, rollResult, username) {
+		var resultsBox = document.getElementById('results-box');
+		var resultsMessage = "";
+		var resultsPlaceholder = document.getElementById('results-placeholder');
+		console.log(rollResult);
+		if (modifierValue !== 0) {
+			resultsMessage = username + " rolled: 1D" + diceMax + " + " + modifierValue + " ... for a total of <strong>" + rollResult + "</strong>";
+		} else {
+			resultsMessage = username + " rolled: 1D" + diceMax + " ... and got <strong>" + rollResult + "</strong>";
+		}
+		resultsPlaceholder.innerHTML = resultsMessage;
+		resultsBox.style.visibility="visible";
+	}
+
 	var rollResult;
 
 	$(".roll-btn").on("tap", function() {
@@ -90,6 +104,7 @@ $(document).ready(function(e) {
 			username = "dicebot";
 		}
 		var payload = buildPayload(btn_id, rollResult, modifierValue, username);
+		insertResultIntoPage(diceMax, modifierValue, rollResult, username);
 		$.post(slackLink, payload
 		);
 		console.log(payload);
@@ -279,7 +294,7 @@ $(document).ready(function(e) {
 			return payload;
 		}
 	}
-	function inserResultIntoPage(rollResults, username) {
+	function swInsertResultIntoPage(rollResults, username) {
 		var resultsBox = document.getElementById('sw-results-box');
 		var resultsMessage = "";
 		var resultsPlaceholder = document.getElementById('sw-results-placeholder');
@@ -313,7 +328,7 @@ $(document).ready(function(e) {
 			if (username === "") { username = "R2D20"; }
 
 			var payload = buildSwPayload(diceActiveLevel, rollResults, username, false); // false refers to 'force' boolean used by force dice
-			inserResultIntoPage(rollResults, username);
+			swInsertResultIntoPage(rollResults, username);
 			$.post(slackLink, payload);
 
 			console.log(payload);
