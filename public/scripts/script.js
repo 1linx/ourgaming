@@ -78,6 +78,7 @@ $(document).ready(function(e) {
 		var resultsPlaceholder = document.getElementById('results-placeholder');
 		console.log(rollResult);
 		if (modifierValue !== 0) {
+			rollResult = rollResult + modifierValue;
 			resultsMessage = username + " rolled: 1D" + diceMax + " + " + modifierValue + " ... for a total of <strong>" + rollResult + "</strong>";
 		} else {
 			resultsMessage = username + " rolled: 1D" + diceMax + " ... and got <strong>" + rollResult + "</strong>";
