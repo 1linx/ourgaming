@@ -52,7 +52,7 @@ $(document).ready(function(e) {
 
 	function buildPayload(diceType, numberRolled, modifierValue, username) {
 		var payload = 'payload={';
-		payload += '"channel": "#rolldembones"';
+		payload += '"channel": "#test"';
 		payload += ',"username": "' + username + '"';
 		payload += ',"icon_emoji": ":game_die:"';
 		payload += ',"text": "Rolled ' + diceType;
@@ -230,7 +230,7 @@ $(document).ready(function(e) {
 		if (force == false) {
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -275,7 +275,7 @@ $(document).ready(function(e) {
 		} else { // ... Otherwise it is a force dice, so do this
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -341,12 +341,15 @@ $(document).ready(function(e) {
 
 		// use simple roller for this
 		var rollResult = getDiceFaces("sw_force", diceRoll(1,1,12));
-
+		console.log("rollResult: " + rollResult);
 		username = $('#nameInput').val();
 		if (username === "") { username = "R2D20"; }
 
 		// shares same buildSwPayload function as other dice, so pass empty array because there is no dice active level, the result array, username and force == true.
 		var payload = buildSwPayload([], rollResult, username, true);
+		var rollResults = {"Force": rollResult};
+		swInsertResultIntoPage(rollResults, username);
+
 		$.post(slackLink, payload
 		);
 
@@ -367,6 +370,8 @@ $(document).ready(function(e) {
 
 		// Note: empty array needed in buildPayload function, otherwise it will attempt to use username as modifier.
 		var payload = buildPayload(btn_id, rollResult, "", username);
+		var rollResults = {"percent": rollResult};
+		swInsertResultIntoPage(rollResults, username);
 		$.post(slackLink, payload
 		);
 		console.log(payload);
