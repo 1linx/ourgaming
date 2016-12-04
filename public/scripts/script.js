@@ -52,7 +52,7 @@ $(document).ready(function(e) {
 
 	function buildPayload(diceType, numberRolled, modifierValue, username) {
 		var payload = 'payload={';
-		payload += '"channel": "#rolldembones"';
+		payload += '"channel": "#test"';
 		payload += ',"username": "' + username + '"';
 		payload += ',"icon_emoji": ":game_die:"';
 		payload += ',"text": "Rolled ' + diceType;
@@ -215,6 +215,7 @@ $(document).ready(function(e) {
 		typeHolderArr.forEach( function(dieType) {
 			dicePositionTrack.forEach( function(position){
 				$("#"+ dieType + position).on("tap", function(){
+					console.log("Tappy tap: " + "#"+ dieType + position);
 					toggleClassesOnSwDice(dieType, position);
 				});
 			});
@@ -229,7 +230,7 @@ $(document).ready(function(e) {
 		if (force == false) {
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
@@ -274,7 +275,7 @@ $(document).ready(function(e) {
 		} else { // ... Otherwise it is a force dice, so do this
 
 			var payload = 'payload={';
-			payload += '"channel": "#rolldembones"';
+			payload += '"channel": "#test"';
 			payload += ',"username": "' + username + '"';
 			payload += ',"icon_emoji": ":sw_lightsabers:"';
 			payload += ',"text": "';
