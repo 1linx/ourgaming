@@ -27,6 +27,11 @@ app.get('/', function (req, res) {
     });
 });
 
+// contact page
+app.get('/contact', function (req, res) {
+    res.render('contact');
+});
+
 // route that listens for a POST to /hello
 app.post('/hello', hellobot);
 
