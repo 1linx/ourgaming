@@ -1,6 +1,9 @@
 {
   "name": "slack-dice-bot",
   "version": "0.1.0",
+  "engines": {
+    "node": "6.11.1"
+  },
   "description": "A dice rolling slack bot with front end, with thanks to Taylor Brennan for the original dice rolling slack bot tutorial: https://github.com/taylorjbrennan/getting-started-with-slack-bots.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
